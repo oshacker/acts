@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <title>admin</title>
+    
+	<script language="javascript" type="text/javascript" src="../../resources/lib/jquery.min.js"></script>
+	<script language="javascript" type="text/javascript" src="admin_setting_client.js" ></script>
+		
+    <link rel="stylesheet" type="text/css" href="../../resources/styles/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../resources/styles/style_table.css" />
+    
+</head>
+
+
+<body>
+<div id="wapper">
+
+<!--header-->
+<header>
+<h2 class="title">admin</h2>
+</header>
+<br>
+
+<!--side bar-->
+
+<div id="menu">
+    <ul>
+        <li><a href="./admin_setting.html">Setting</a></li>
+		<li><a href="./admin_monitor.html">Monitor</a></li>
+        <li><a href="./admin_result.html">Result</a></li>
+    </ul>
+</div>
+<!--contents-->
+	<table border="1px" width="100%">
+		<thead>
+	        <tr>
+				<th scope='col'> Profile List </th>
+	            
+				<th scope='col'> Application List </th>
+	        <tr>
+        </thead>
+        <tr>
+			<td>
+				<div>
+					<div style="height:300px;overflow:auto;">
+						<table>
+							<div id="profile_list"></div>
+		                </table>
+		            </div>
+		            <button type="button" onclick="selectAllProfile(true);">Select All</button>
+		            <button type="button" onclick="selectAllProfile(false);">Deselect All</button>
+		            <button type="button" onclick="onClickDeleteProfile();">Delete</button>
+		            <button type="button" onclick="newPopup('./admin_profile.html')">Make Profile</button>                    
+                </div>
+			</td>
+			<td rowspan='3'>
+		        <div>
+		            <div style="height:575px;width:100%;overflow:auto;">
+						<table>
+		                    <div id="application_list"></div>
+		                </table>
+		            </div>
+		            <button type="button" onclick="selectAllApk(true);">Select All</button>
+		            <button type="button" onclick="selectAllApk(false);">Deselect All</button>
+		        </div>
+		    </td>
+        </tr>
+		<tr>
+			<td>
+				<table width='100%'>
+					<thead>
+					<tr>
+						<th scope='col'><div id="deviceListName">Device List</div> </th> 
+					</tr>
+				    </thead>
+				</table>
+			</td>
+		</tr>
+        <tr>
+        	<td align = "left" width = "500px">
+	        	<div >
+					<div style="height:200px;width:100%;overflow:auto;">
+						<table>
+                            <div id="device_list"></div>
+                        </table>
+                    </div>
+                    <button type="button" onclick="selectAllDevice(true);">Select All</button>
+                    <button type="button" onclick="selectAllDevice(false);">Deselect All</button>
+		           
+	        	</div>
+       	 	</td>
+		</tr>
+        <tr>
+			<td colspan="2" align="center">
+			   <button style="width:200px; height:50px" type="button" onclick="onClickRun()"><font size="6">Run</font></button>
+			</td>
+		</tr>
+	</table>
+
+<!--footer
+<footer>footer</footer>
+-->
+</div>
+
+</body>
+</html>

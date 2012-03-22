@@ -1,0 +1,589 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>profile</title>
+    <script language="javascript" type="text/javascript" src="../../resources/lib/jquery.min.js"></script>
+	<script language="javascript" type="text/javascript" src="./admin_setting_client.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../resources/styles/style.css" />
+
+	<script type="text/javascript">
+		
+	var edit_modes =null;
+	var arg = null;
+
+	function onLoadEditProfiles(val){			
+			
+		if (typeof window.dialogArguments == "object"){	
+			
+			var f = document.form;
+			
+			arg = window.dialogArguments;
+			//console.log("arg:", arg);
+			
+			edit_modes = arg.edit_mode;
+			console.log("edit", edit_modes );				
+			
+			f.fname.value = arg.name;
+			f.fname.disabled  = true;
+			f.event.value = arg.event;
+			f.count.value = arg.count;
+			f.interval.value = arg.seed_interval;
+			f.throttle.value = arg.throttle;
+			f.hour.value = arg.hours;
+			f.min.value = arg.mins;
+			f.day.value = arg.days;
+
+			for (var i=0; i<f.week.length; i++){
+				for (var j=0; j<arg.weeks.length; j++ ){
+					//console.log("=====", f.week[i].value);
+					//console.log("====", arg.weeks[j]);
+					if(f.week[i].value == arg.weeks[j]){
+						f.week[i].checked = true;
+					}
+				}
+			}
+			
+			f.month.value = arg.months;
+				
+		}else{
+			edit_modes = false;
+			console.log("not edit", edit_modes);
+		}
+	}
+	
+	function trimString( str ) {
+
+	    return str.replace(/^\s*/, "").replace(/\s*$/, "");
+	}
+	
+	// String.prototype.trim = function () {
+	// 	
+	//     return this.replace(/^\s*/, "").replace(/\s*$/, "");
+	// }
+	
+	function onClickSubmit(index){
+		
+		  var name = $("#fname").val().toLowerCase();
+            //var schedule = $("#schedule").val();
+            var event = $("#event").val();
+            var count = $("#count").val();
+            var start_seed = 0; //$("#start_seed").val();
+            var end_seed = ( ($("#count").val() - 1 ) * $("#interval").val());//$("#end_seed").val();
+            var interval = $("#interval").val();
+            var throttle = $("#throttle").val();
+			var hours = $("#hour").val();
+			var mins = $("#min").val();
+			
+			var arrWeek = [];
+			$("input[name='week']:checkbox:checked").each(function(){
+															arrWeek.push($(this).val());
+															});
+			var weeks = arrWeek.join(',');
+			var days = $("#day").val();
+			var months = $("#month").val();
+			
+			if (!frmchk_char(name, 0)) {
+            	alert("The first letter of the profile name is alphabet. And Alphabet, Numbers and '_' can be input");
+            	$("#fname").focus();
+            	return;
+            }          
+            if (!frmchk_char(event, 2)) {
+            	alert("event count: Numbers can be input");
+                $("#event").focus();
+                return;
+            }
+            if (!frmchk_char(count, 2)) {   
+                $("#count").focus();
+                return;
+            }
+            if (!frmchk_char(start_seed, 2)) {
+                alert("start seed: Numbers can be input");
+                $("#start_seed").focus();
+                return;
+            }
+            if (!frmchk_char(end_seed, 2)) {
+                alert("end seed: Numbers can be input");
+                $("#end_seed").focus();
+                return;
+            }
+            if (!frmchk_char(interval, 2)) {
+                alert("interval: Numbers can be input");
+                $("#interval").focus();
+                return;
+            }
+            if (!frmchk_char(throttle, 2)) {
+                alert("throttle: Numbers can be input");
+                $("#throttle").focus();
+                return;
+            }
+			if ($("#event").val()==0 || $("#count").val()==0 || $("#interval").val()==0 )
+			{
+				alert(" 0 or negative number is not available ");
+				return;
+			}
+
+		if (edit_modes==true)
+		{
+			console.log("edit", edit_modes);
+
+			//edit_mode = false;
+			//edit_index = -1;
+			//alert("세이브");
+			var profile = new Object();
+			profile = mProfilesData[arg.name];
+
+			profile.name=arg.name;
+			profile.config.event= event;
+			profile.config.count= count;
+			profile.config.seed_start= 0; //$('#textSeedStart'+index).val();
+			profile.config.seed_end= end_seed	 //$('profile'+index).val();
+			profile.config.seed_interval= interval;
+			profile.config.throttle= throttle;
+			
+			var l_hours = hours.replace(/\s+/g, '');
+			var l_mins = mins.replace(/\s+/g, '');
+			var l_days = days.replace(/\s+/g, '');
+			var l_weeks = weeks.replace(/\s+/g, '');
+			var l_months = months.replace(/\s+/g, '');
+			
+			var arrMins = [];
+			var arrHours = [];
+			var arrDays = [];
+			var arrWeeks = [];
+			var arrMonths = [];
+			
+			if(l_hours != '')
+				arrHours= l_hours.split(',');
+			if(l_mins != '')
+				arrMins= l_mins.split(',');
+			if(l_days != '')
+				arrDays= l_days.split(',');
+			if(l_weeks != '')
+				arrWeeks= l_weeks.split(',');
+			if(l_months != '')
+				arrMonths= l_months.split(',');
+			
+			profile.schedule.hours = arrHours;
+			profile.schedule.mins = arrMins;
+			profile.schedule.days = arrDays;
+			profile.schedule.weeks = arrWeeks;
+			profile.schedule.months = arrMonths;
+			
+			$.ajax({
+				cache: false,
+				type: "POST",
+				url: "/request_admin_edit_profile",
+				dataType: "json",
+				data: JSON.stringify(profile)
+				,
+				error: function () {
+
+				},
+				success: function (data) {
+					mProfilesData = data;				
+					createProfileList(data);
+				}
+			});
+
+			window.opener.location.reload();
+			window.close();
+
+		}else{
+			
+			for(var k in mProfilesData){
+				if (k == name) {
+            		alert("profile name is existed.");
+                    $("#fname").focus();
+                    return;
+            	}
+            }
+
+			$.ajax({
+				cache: false,
+				type: "POST",
+				url: "/request_admin_new_profile",
+				dataType: "json",
+				data: JSON.stringify({name:name, event:event, count:count, seed_start:start_seed, seed_end:end_seed, seed_interval:interval, throttle:throttle, mins:mins, hours:hours, weeks:weeks, days:days, months:months }),
+				error: function () {
+
+				},
+				success: function (data) {
+					mProfilesData = data;
+					console.log(mProfilesData)
+					createNew();
+				}
+			});          
+		}
+	}
+	
+	function createNew(){
+
+		$(opener.document).find("#profile_list").empty();   
+		
+		var thead = "<thead>";
+		thead += "<tr>"; 
+		thead += "<th scope='col'>Profile Name</th>";
+		thead += "<th scope='col'>edit</th>";
+		thead += "<th scope='col'>event count</th>";
+		thead += "<th scope='col'>test count</th>";
+		thead += "<th scope='col'>start seed</th>";
+		thead += "<th scope='col'>end seed</th>";
+		thead += "<th scope='col'>interval</th>";
+		thead += "<th scope='col'>throttle(ms)</th>";
+		thead += "<th scope='col'>alarm</th>";
+		thead += "</tr>"
+		thead += "</thead>"
+		
+		$(opener.document).find("#profile_list").append(thead);
+		
+		var i = 0; 
+		
+		for(var k in mProfilesData){
+			//console.log(k); 
+			var pf = "<tr><td width='30%'>";
+			if(i==0)
+				pf += "<input type='checkbox' checked name='profileName' id = 'profileName" + i + "' value='"+ k + "'/>";
+			else
+				pf += "<input type='checkbox' name='profileName' id = 'profileName" + i + "' value='"+ k + "'/>";
+			//pf += "<a href='#' onclick=onClickProfile('"+ k +"');>" + k + "</a>";
+			pf += k;
+			pf += "</td><td width='15%'>";
+			//TODO
+			pf += "<div id='edit_button" + i + "'>";
+			pf += "<button type='button' onclick='onClickEdit("+ i +")'>Edit</button><br/>";
+			pf += "</div>";
+			pf += "</td><td width='15%'>";
+			pf += "<div id='evt" + i + "'>";
+			pf += mProfilesData[k]["config"]["event"];
+			pf += "</div>";
+			pf += "</td><td width='15%'>";
+			pf += "<div id='total" + i + "'>";
+			pf += mProfilesData[k]["config"]["count"];
+			pf += "</div>";
+			pf += "</td>";
+			pf += "</td><td width='15%'>";
+			pf += "<div id='seed_start" + i + "'>";
+			pf += mProfilesData[k]["config"]["seed_start"];
+			pf += "</div>";
+			pf += "</td>";
+			pf += "</td><td width='15%'>";
+			pf += "<div id='seed_end" + i + "'>";
+			pf += mProfilesData[k]["config"]["seed_end"];
+			pf += "</div>";
+			pf += "</td>";
+			pf += "</td><td width='15%'>";
+			pf += "<div id='seed_interval" + i + "'>";
+			pf += mProfilesData[k]["config"]["seed_interval"];
+			pf += "</div>";
+			pf += "</td>";
+			pf += "</td><td width='15%'>";
+			pf += "<div id='throttle" + i + "'>";
+			pf += mProfilesData[k]["config"]["throttle"];
+			pf += "</div>";
+			pf += "</td><td width='15%'>";
+
+			if (mProfilesData[k]["activity"]==true ){
+				pf += "<div id='alarm_button" + i + "'>";
+				pf += "<button type='button' style='width:50px' id="+k+" onclick='onClickAlarm()' value='off' >OFF</button><br/>";
+				pf += "</div>";
+			}else{
+				pf += "<div id='alarm_button" + i + "'>";
+				pf += "<button type='button' style='width:50px' id="+k+" onclick='onClickAlarm()' value='on' >ON</button><br/>";
+				pf += "</div>";
+			}
+			
+			pf += "</td>";
+			pf += "</tr>";
+			
+			$(opener.document).find("#profile_list").append(pf); 
+			
+			profile_attr[i] = mProfilesData[k];
+			i++;
+		}
+		
+		window.opener.location.reload();
+		window.close();	
+	}
+
+	function selectedHour(val) {
+		var f = document.form;
+			
+		if(f.hour.value != ""){
+			if(f.hour.value.charAt(f.hour.value.length-1)==","){
+				f.hour.value += f.select_hour.value + "," ;
+			}else{
+				f.hour.value += "," + f.select_hour.value;
+			}
+		}else{
+			f.hour.value += f.select_hour.value + ",";
+		}
+
+		var A = f.hour.value 
+		var tmp = A.split(",");
+		var len = A.length;
+		
+		//TODO
+		// 중복 체크
+
+		for (var j=0; j<tmp.length; j++)
+		{
+			if (tmp[j] == val)
+			{
+				console.log("seem");
+				}
+			}
+			//TODO
+	
+	 }
+
+	 function selectedMinute(val) {	
+		var f = document.form;
+
+		if(f.min.value != ""){
+			if(f.min.value.charAt(f.min.value.length-1)==","){
+				f.min.value += f.select_min.value + "," ;
+			}else{
+				f.min.value += "," + f.select_min.value;
+			}
+		}else{
+			f.min.value += f.select_min.value + ",";
+		}
+	 }
+
+	 function selectedDay(val) {
+		var f = document.form;
+	
+		if(f.day.value != ""){
+			if(f.day.value.charAt(f.day.value.length-1)==","){
+				f.day.value += f.select_day.value + "," ;
+			}else{
+				f.day.value += "," + f.select_day.value;
+			}
+		}else{
+			f.day.value += f.select_day.value + ",";
+		}
+	 }
+
+	 function selectedMonth(val) {	
+		var f = document.form;
+	
+		if(f.month.value != ""){
+			if(f.month.value.charAt(f.month.value.length-1)==","){
+				f.month.value += f.select_month.value + "," ;
+			}else{
+				f.month.value += "," + f.select_month.value;
+			}
+		}else{
+			f.month.value += f.select_month.value + ",";
+		}
+	 }
+	 </script>
+
+</head>
+
+<body onLoad="onLoadEditProfiles()" >
+<form name="form">
+      <table>
+        <tr>
+            <td>
+                name
+            </td>
+            <td>
+                <input type="text" name="fname" id="fname"/>
+            </td>
+        </tr>
+         <tr>
+            <td>
+                event count
+            </td>
+            <td>
+                <input type="text" name="event" maxlength="5" id="event" value="100"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                total count
+            </td>
+            <td>
+                <input type="text" name="count" maxlength="5" id="count" value="200"/>
+            </td>
+        </tr>
+<!--        <tr>
+            <td>
+                seed
+            </td>
+            <td>
+                <input type="text" name="seed" maxlength="4" id="start_seed" value="0"/> ~ <input type="text" name="2" maxlength="4" id="end_seed" value="990"/>
+            </td>
+        </tr> -->
+        <tr>
+            <td>
+                interval
+            </td>
+            <td>
+                <input type="text" name="3" maxlength="4" id="interval" value="10"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                throttle
+            </td>
+            <td>
+                <input type="text" name="throttle" maxlength="4" id="throttle" value="0"/>
+            </td>
+        </tr>		
+		<tr>
+            <td colspan="2">
+               <hr size="1">
+            </td>
+        </tr>
+		<tr>
+            <td>
+				Hour
+			</td>
+            <td>
+				<input type="text" name="hour" id="hour" value="" /> 
+				<select name="select_hour" id="select_hour" onchange="selectedHour(this.options[this.selectedIndex].value)">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+					<option value="17">17</option>
+					<option value="18">18</option>
+					<option value="19">19</option>
+					<option value="20">20</option>
+					<option value="21">21</option>
+					<option value="22">22</option>
+					<option value="23">23</option>
+					<option value="24">24</option>
+				</select>
+				(ex:0,12,23)	
+			</td>
+        </tr>
+		<tr>
+            <td>
+				Minute
+			</td>
+            <td>
+				<input type="text" name="min" id="min" />
+				<select name="select_min" id="select_min" onchange="selectedMinute(this.options[this.selectedIndex].value)">
+					<option value="10">10</option>
+					<option value="15">15</option>
+					<option value="20">20</option>
+					<option value="25">25</option>
+					<option value="30">30</option>
+					<option value="35">35</option>
+					<option value="35">45</option>
+					<option value="50">50</option>
+					<option value="55">55</option>
+				</select>
+				(ex:0,30,59)	
+            </td>
+        </tr>
+		<tr>
+			<td>
+				Week
+			</td>
+            <td>				
+				<input type="checkbox" name="week" id="week" value="0" >월</input>
+				<input type="checkbox" name="week" id="week" value="1" >화</input>
+				<input type="checkbox" name="week" id="week" value="2" >수</input>
+				<input type="checkbox" name="week" id="week" value="3" >목</input>
+				<input type="checkbox" name="week" id="week" value="4" >금</input>
+				<input type="checkbox" name="week" id="week" value="5" >토</input>
+				<input type="checkbox" name="week" id="week" value="6" >일</input>
+            </td>	
+			    
+        </tr>
+		<tr>
+            <td>
+				Day
+            </td>
+            <td>
+				<input type="text" name="day" id="day" />
+					<select name="select_day" id="select_day" onchange="selectedDay(this.options[this.selectedIndex].value)">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+					<option value="17">17</option>
+					<option value="18">18</option>
+					<option value="19">19</option>
+					<option value="20">20</option>
+					<option value="21">21</option>
+					<option value="22">22</option>
+					<option value="23">23</option>
+					<option value="24">24</option>
+					<option value="25">25</option>
+					<option value="26">26</option>
+					<option value="27">27</option>
+					<option value="28">28</option>
+					<option value="29">29</option>
+					<option value="30">30</option>
+					<option value="31">31</option>
+				</select>
+				(ex:1,17,31)					
+			</td>
+        </tr>
+		<tr>
+            <td>
+				Month
+            </td>
+            <td>
+				<input type="text" name="month" id="month" />
+				<select name="select_mon" id="select_month" onchange="selectedMonth(this.options[this.selectedIndex].value)">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+				</select>
+				(ex:1,5,12)
+				
+			</td>
+        </tr>
+
+        <tr align="center">
+            <td colspan="2">
+				<br><input type="button" onclick="onClickSubmit()" value="Save" />
+				<input type="button" onclick="window.close()" value="Close" />
+            </td>
+        <tr>
+      </table>
+</form>
+</body>
+
+</html>

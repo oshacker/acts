@@ -1,0 +1,114 @@
+Installation:
+------------------------------------
+	1. Install NodeJS
+		(http://nodejs.org/#download)
+		
+		Support windows,mac os, linux.
+	
+	2. Install NPM(Node package manager)
+		(http://npmjs.org/doc/README.html)
+		
+		Modules, resources and more
+		This is just enough info to get you up and running.
+		Much more info available via npm help once it's installed
+		
+	3. Install nodemailer
+		
+		Command line: $npm install nodemailer
+		
+	4. Running program
+	
+		$cd /SOURCEROOT/
+		$node main.node.js
+		If It is first time, storage folder is made.
+		You can change storage name. Set this followings.
+		- Open /src/config.node.js
+		- Find variable "NAME_STORAGE", and change yours.
+		- If you want to change storage location, modify some this code.
+		
+		Finally, Open browser and go.
+		(http://localhost:YOURPORT/)
+
+
+
+Setting option:
+------------------------------------
+	1. Setting host mail environments.
+		
+		- If crash happened during test, this program notify to you 
+		  by email to attach log files.
+		- Open /src/config.node.js
+		- Find variable "MAIL", and setting yours.
+			If you use google mail, only change "user", "password".
+			
+	2. Setting forward mail.
+
+		- There is meta_profiles.json in storage directory( Default:/SOURCEROOT/db/ ).
+		- Open and modify mail settings.
+			
+			ex)		"mail": {
+						"to": "example@xxx.com, example@xxx.com,",
+						"cc": "example@xxx.com",
+						"bcc": "example@xxx.com",
+						"activity": true	//	must be true, then mail notification is working.
+					}
+			
+		
+	3. Setting profiles
+	
+		- Press edit button, In profile list panel
+		- Setting yours.
+			* Common config
+				name: unique profile name.
+				event count: event count per monkey.
+				total count: monkey count per test.
+				interval: Seed Incremental value between monkeys.
+						  Seed value for pseudo-random number generator.
+				throttle: Inserts a fixed delay between events(milliseconds)
+			
+			* Schedule config
+				Turn on profile's alarm in profile list.
+				(http://localhost:YOURPORT/views/admin/admin_setting.html)
+				According to date settings tests will be automatically run.
+				"Hour": per hour			ex) 0,1,...,23
+				"Minute": per minute		ex) 0,1,...,59
+				"Week": per week			check box
+				If you set this week option, "Day" settings is ignored.
+				
+				"Day": per day			ex) 1,2,...,31
+				"Month": per month		ex) 1,2,...,12
+		- Save
+		
+	3. Make new profile
+		This is similar to "Setting profiles".
+		
+
+
+
+ACTS play:
+------------------------------------
+	1. Connect android devices by UBS.
+	
+	(http://localhost:YOURPORT/views/admin/admin_setting.html)	
+	2. Click profile in profile list panel, then device list is showed.
+	3. Click device in device list panel, then application list is showed.
+	4. Check comboboxs UI( profile, device, application ) for testing.
+	5. Press Run button.
+	
+	(http://localhost:YOURPORT/views/admin/admin_monitor.html)
+	6. You can see test process and stop.
+		
+	(http://localhost:YOURPORT/views/admin/admin_result.html)
+	7. If test is ended, move result page and show test history per profile.
+	
+	Note: User manual to attach screen shots is provided soon.
+	(url:  https://github.com/actuskr/ACTS/wiki)
+
+
+
+
+
+
+
+
+
