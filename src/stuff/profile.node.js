@@ -95,14 +95,14 @@ Profile.prototype.addScheduler = function() {
 					de.log(TAG, 'add profile scheduler');
 				break;
 				
-				case ProfileScheduler.ALARM_WAKEUP:
+				case ProfileScheduler.EVENT.ALARM_WAKEUP:
 					de.log(TAG, data);
 					var devices = g_manager.getDevicePool();
 					//makeJobs(devices, _this);
 					_this.makeJobs(devices);
 				break;
 				
-				case ProfileScheduler.END:
+				case ProfileScheduler.EVENT.END:
 					de.log(TAG, 'off profile scheduler');
 				break;
 			}

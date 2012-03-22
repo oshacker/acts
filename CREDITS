@@ -1,10 +1,23 @@
+Owner:
+------------------------------------
+N: Actus Ltd.
+E: openSource@actus.kr
+W: http://www.actus.kr/
+T: +82-2-564-8418
+L: Seoul, Korea
+
+
+
+
 Contributors:
 ------------------------------------
 N: minossi
 E: minossi.k@gmail.com
 I: Initialization for this project
 
-
+N: Yezune Choi
+E: yezune@gmail.com
+I: adb / storage module
 
 
 Code Reviewers:
@@ -18,7 +31,8 @@ I: Driver
 
 QA / QC:
 ------------------------------------
-
+N: Seungho Shin
+E: frenzygale@gmail.com
 
 
 
