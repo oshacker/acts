@@ -70,7 +70,7 @@ Profile.prototype.getStartSeed = function() { return this.profile.config.seed_st
 Profile.prototype.getEndSeed = function() { return this.profile.config.seed_end };
 Profile.prototype.getSeedInterval = function() { return this.profile.config.seed_interval };
 Profile.prototype.getThrottle = function() { return this.profile.config.throttle };
-Profile.prototype.getEMail = function() { return this.profile.email; };
+Profile.prototype.getMail = function() { return this.profile.mail; };
 
 Profile.prototype.setActivity = function( isActivity ) {
 	
@@ -96,7 +96,7 @@ Profile.prototype.addScheduler = function() {
 				break;
 				
 				case ProfileScheduler.EVENT.ALARM_WAKEUP:
-					de.log(TAG, data);
+					de.log(TAG, args);
 					var devices = g_manager.getDevicePool();
 					//makeJobs(devices, _this);
 					_this.makeJobs(devices);
