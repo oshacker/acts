@@ -282,8 +282,41 @@ notifyByMail = function( self, job ) {
 	
 	var mail = new Mail();
 	
-	mail.setTo( self.profile.getEMail() );
-	mail.setSubject( '[ACTS] Failed stability test notification' );
+	mail.setTo( self.profile.getMail().to );
+	mail.setCC( self.profile.getMail().cc );
+	mail.setBCC( self.profile.getMail().bcc );
+	
+	var monekys = job.monkeys;
+	
+	var isClear = true;
+	
+	for( var i = 0; i < monekys.length; i++ ) {
+		
+		var monkey = monekys[ i ];
+		
+		if( !monkey.pass ) {
+			
+			var logcatName = 'logcat_' + i + '(by seed:' + monkey.seed +').txt';
+			var monkeyName = 'monkey_' + i + '(by seed:' + monkey.seed +').txt';
+			
+			var logcatPath = storage.logcatPath( job.profile, 
+												job.startTime.day,
+												job.startTime.time,
+												job.target.serial,
+												i );
+												
+			var monkeyPath = storage.monkeyPath( job.profile, 
+												job.startTime.day,
+												job.startTime.time,
+												job.target.serial,
+												i );
+			
+			mail.addFile( logcatName, logcatPath );
+			mail.addFile( monkeyName, monkeyPath );
+			
+			isClear = false;
+		}
+	}
 	
 	var html = '';
 	html += '<p><span style="color:green">version: </span>';
@@ -313,43 +346,19 @@ notifyByMail = function( self, job ) {
 	html += '<p><span style="color:green">pass rate: </span>';
 	html += '<span style="color:gray">' + job.rate + '(%)</span></p>';
 	html += '<hr size="5"><hr color="maroon">';
-	html += '<p><b><span style="background-color:yellow">We Attach failed log files...Good luck :)</span></b></p>'; 
+	
+	if(isClear) {
+		
+		mail.setSubject( '[ACTS] All clear stability test notification' );
+	} else {
+		
+		html += '<p><b><span style="background-color:yellow">We Attach failed log files...Good luck :)</span></b></p>';
+		mail.setSubject( '[ACTS] Failed stability test notification' );
+	}
 	
 	mail.setHTML( html );
 	
-	var monekys = job.monkeys;
-	
-	var isTodo = false;
-	
-	for( var i = 0; i < monekys.length; i++ ) {
-		
-		var monkey = monekys[ i ];
-		
-		if( !monkey.pass ) {
-			
-			var logcatName = 'logcat_' + i + '(by seed:' + monkey.seed +').txt';
-			var monkeyName = 'monkey_' + i + '(by seed:' + monkey.seed +').txt';
-			
-			var logcatPath = storage.logcatPath( job.profile, 
-												job.startTime.day,
-												job.startTime.time,
-												job.target.serial,
-												i );
-												
-			var monkeyPath = storage.monkeyPath( job.profile, 
-												job.startTime.day,
-												job.startTime.time,
-												job.target.serial,
-												i );
-			
-			mail.addFile( logcatName, logcatPath );
-			mail.addFile( monkeyName, monkeyPath );
-			
-			isTodo = true;
-		}
-	}
-	
-	if(isTodo)
+	if( self.profile.getMail().activity )
 		mail.sendMail();
 };
 
