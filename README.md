@@ -11,7 +11,8 @@ Thanks.
 
 
 
-### WHAT IS ACTS
+WHAT IS ACTS
+---
 
 ACTS is program for android stability test, written in Node JS, very easy install and use.
 This GUI is based on browser interface and uses android SDK monkey tool.
