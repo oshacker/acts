@@ -11,7 +11,7 @@ Thanks.
 
 
 
-### WHAT IS ACTS:
+### WHAT IS ACTS
 
 ACTS is program for android stability test, written in Node JS, very easy install and use.
 This GUI is based on browser interface and uses android SDK monkey tool.
@@ -44,7 +44,7 @@ This following is motivation for us.
 
 
 
-### Source Roadmap:
+### Source Roadmap
 
 main.node.js					main
 index.html						main view
@@ -65,7 +65,7 @@ index.html						main view
 
 
 
-### Coding Convention:
+### Coding Convention
 
 1. Base rule is google style guide for javascript
   (http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml)
@@ -84,25 +84,23 @@ index.html						main view
 
 
 
-Source Code Repository:
+Source Code Repository
 ---
-	- [Repositories](https://github.com/oshacker/acts) are located at github.
-	You can get them with any git client.
+  - [Repositories](https://github.com/oshacker/acts) are located at github. You can get them with any git client.
 
 
 
 	
-Bugs & Issues:
+Bugs & Issues
 ---
-	- Please report any bugs and issues to this: [Issues page](https://github.com/oshacker/acts/issues).
-	We welcome any comments.
+  - Please report any bugs and issues to this: [Issues page](https://github.com/oshacker/acts/issues). We welcome any comments.
 
 
 
 
-Documents:
+Documents
 ---
-	- Documents is located at [Wiki page](https://github.com/oshacker/acts/wiki)
+  - Documents is located at [Wiki page](https://github.com/oshacker/acts/wiki)
 
 
 
