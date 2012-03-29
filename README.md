@@ -48,18 +48,29 @@ This following is motivation for us.
 ### Source Roadmap
 
 main.node.js					main
+
 index.html						main view
+
 
 /resource/						view's images , libraries and stylesheets
 
+
 /src/admin_manager.node.js		initialization
+
 /src/fu.node.js					NodeJS server
+
 /src/adb/						connect external process by command line
+
 /src/data/						test storage managing
+
 /src/handlers/					handling client requests
+
 /src/scheduler/ 				loop process
+
 /src/stuff/						objects
+
 /src/utils/						utilities
+
 
 /views/							each view's source files(html, javascript for client).
 
