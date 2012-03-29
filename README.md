@@ -20,8 +20,11 @@ It is best use of the monkey tool.
 
 During this...
 Usage is 3 step, very simple.
+
 	1. Connecting devices.
+
 	2. Starting tests.
+
 	3. Viewing logs.(android logcat, monkey, system information - cpu / memory / network)
 
 Note: See also INSTALL file( install & manual documents ). 
@@ -47,32 +50,32 @@ This following is motivation for us.
 
 ### Source Roadmap
 
-main.node.js					main
+main.node.js					:main
 
-index.html						main view
-
-
-/resource/						view's images , libraries and stylesheets
+index.html						:main view
 
 
-/src/admin_manager.node.js		initialization
-
-/src/fu.node.js					NodeJS server
-
-/src/adb/						connect external process by command line
-
-/src/data/						test storage managing
-
-/src/handlers/					handling client requests
-
-/src/scheduler/ 				loop process
-
-/src/stuff/						objects
-
-/src/utils/						utilities
+/resource/						:view's images , libraries and stylesheets
 
 
-/views/							each view's source files(html, javascript for client).
+/src/admin_manager.node.js		:initialization
+
+/src/fu.node.js					:NodeJS server
+
+/src/adb/						:connect external process by command line
+
+/src/data/						:test storage managing
+
+/src/handlers/					:handling client requests
+
+/src/scheduler/ 				:loop process
+
+/src/stuff/						:objects
+
+/src/utils/						:utilities
+
+
+/views/							:each view's source files(html, javascript for client).
 
 
 
