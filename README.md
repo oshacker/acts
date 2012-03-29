@@ -67,8 +67,8 @@ index.html						main view
 
 ### Coding Convention
 
-1. Base rule is google style guide for javascript
-  (http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml)
+1. Base rule is [google style guide](http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml) for javascript
+  
 
 2. File or directory name must be lowercase alphabet or '-':
 	ex)  i_love_you.txt( OK ), its_cool_directory( OK )
