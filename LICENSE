@@ -34,7 +34,7 @@ ACTS's license follows:
 
 
 Except source files:
-
+	/node_modules/								Each other's license
 	/resuorces/lib/jquery.min.js				jQuery v1.7.1 jquery.com | jquery.org/license 
 	/resources/lib/jqplot/						Copyright (c) 2009-2011 Chris Leonello MIT license
 	/resources/styles/jquery.jqplot.css			Copyright (c) 2009-2011 Chris Leonello MIT license

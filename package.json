@@ -1,0 +1,8 @@
+{
+    "name": "ACTS",
+    "description": "ACTS is program for android stability test, written in Node JS, very easy install and use. This GUI is based on browser interface and uses android SDK monkey tool. It is best use of the monkey tool.",
+    "version": "0.1.0",
+    "author": "minossi",
+    "dependencies": {},
+    "devDependencies": {}
+}
